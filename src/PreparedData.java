@@ -51,7 +51,7 @@ public class PreparedData {
 
             ArrayList<Double> tempArr = valuesExtraction(listOfPoints.get(i));
 
-            for (int ij = 0; ij < indexCoreVales.size(); ij++) {
+            for (int ij = 0; ij < listOfCores.size(); ij++) {
 
                 sum = 0.0;
 
@@ -63,7 +63,7 @@ public class PreparedData {
                     minDistance = sum;
                     coreMinIndex = ij;
                 }
-                if (ij == indexCoreVales.size()-1)
+                if (ij == listOfCores.size()-1)
                     System.out.println(i + ". " + tempArr + " assigned to cluster with core " + listOfCores.get(coreMinIndex)
                             + ". Distance to core -> " + sum);
                 }
@@ -97,30 +97,33 @@ public class PreparedData {
 
         for (int i = 0; i < listOfCores.size(); i++) {
 
-            for (int j = 0; j < mapOfIndexesFromListOfPoints.get(i).size(); j++) {
+            if (mapOfIndexesFromListOfPoints.get(i) != null) {
+                for (int j = 0; j < mapOfIndexesFromListOfPoints.get(i).size(); j++) {
 
-                var extractedPoint = valuesExtraction(listOfPoints.get(mapOfIndexesFromListOfPoints.get(i).get(j)));
+                    var extractedPoint = valuesExtraction(listOfPoints.get(mapOfIndexesFromListOfPoints.get(i).get(j)));
 
-                for (int k = 0; k < extractedPoint.size(); k++) {
+                    for (int k = 0; k < extractedPoint.size(); k++) {
 
-                    double temp = 0.0;
+                        double temp = 0.0;
 
-                    if (i != 0)
-                        temp = mapOfNewCoresVariables.get(k);
+                        if (i != 0)
+                            temp = mapOfNewCoresVariables.get(k);
 
-                    temp += extractedPoint.get(k);
-                    mapOfNewCoresVariables.put(k,temp);
+                        temp += extractedPoint.get(k);
+                        mapOfNewCoresVariables.put(k, temp);
+                    }
                 }
-            }
-            ArrayList<Double> coreValues = new ArrayList<>();
 
-            for (int j = 0; j < mapOfNewCoresVariables.size(); j++) {
-                double temp = mapOfNewCoresVariables.get(j);
-                temp = temp/mapOfIndexesFromListOfPoints.get(i).size();
-                coreValues.add(temp);
-            }
+                ArrayList<Double> coreValues = new ArrayList<>();
 
-            newListOfCores.add(coreValues);
+                for (int j = 0; j < mapOfNewCoresVariables.size(); j++) {
+                    double temp = mapOfNewCoresVariables.get(j);
+                    temp = temp / mapOfIndexesFromListOfPoints.get(i).size();
+                    coreValues.add(temp);
+                }
+
+                newListOfCores.add(coreValues);
+            }
         }
 
         System.out.println("new cores - > \n " + newListOfCores);
